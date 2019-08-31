@@ -21,12 +21,13 @@ class Model(torch.nn.Module):
     def forward(self, X):
         return self.regressor(self.resnet(X))
 
+
 class CACDDataset(Dataset):
     def __init__(self, root_path):
-        file_names_path = os.path.join(root_path, "CACD_file_names_split.pickle")
-        ages_path = os.path.join(root_path, "CACD_ages_split.pickle")
+        file_names_path = os.path.join(root_path, "splits/CACD_file_names_split.pickle")
+        ages_path = os.path.join(root_path, "splits/CACD_ages_split.pickle")
 
-        self.root = os.path.abspath(os.path.join(root_path, "../CACD2000/"))
+        self.root = os.path.abspath(os.path.join(root_path, "/Volumes/MAC/Data/CACD2000/CACD2000"))
         self.totensor = transforms.ToTensor()
         with open(file_names_path, "rb") as f:
             self.file_names = np.array(pickle.load(f))
@@ -57,6 +58,7 @@ class CACDDataset(Dataset):
             img = self.totensor(transform.resize(io.imread(img_path), (224, 224)))
             age = self.ages[idx]
             return img, age
+
 
 class Loss(torch.nn.Module):
     def __init__(self, model):
