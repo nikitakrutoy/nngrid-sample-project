@@ -1,4 +1,5 @@
-torch
+torch==0.4.1
 scikit-image
 torchvision
 numpy
+google-cloud-storage
