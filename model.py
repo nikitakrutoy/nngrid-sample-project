@@ -1,12 +1,12 @@
 from torchvision.models import resnet18
 from torchvision import transforms
-from skimage import transform, io
 from torch.utils.data import Dataset, DataLoader
+from google.cloud import storage
 import numpy as np
 import pickle
 import os
 import torch
-
+import skimage
 
 class Model(torch.nn.Module):
     def __init__(self, pretrained=False):
@@ -23,11 +23,14 @@ class Model(torch.nn.Module):
 
 
 class CACDDataset(Dataset):
-    def __init__(self, root_path):
-        file_names_path = os.path.join(root_path, "splits/CACD_file_names_split.pickle")
-        ages_path = os.path.join(root_path, "splits/CACD_ages_split.pickle")
+    def __init__(self, root_path, gcs=True):
+        file_names_path = os.path.join(root_path, "data/CACD_file_names.pickle")
+        ages_path = os.path.join(root_path, "data/CACD_ages.pickle")
+        self.client = storage.Client()
+        self.bucket = self.client.bucket("cacd2000")
+        self.root = os.path.abspath(os.path.join(root_path, "data/CACD2000"))
 
-        self.root = os.path.abspath(os.path.join(root_path, "/Volumes/MAC/Data/CACD2000/CACD2000"))
+        self.gcs = gcs
         self.totensor = transforms.ToTensor()
         with open(file_names_path, "rb") as f:
             self.file_names = np.array(pickle.load(f))
@@ -47,17 +50,28 @@ class CACDDataset(Dataset):
             images = []
             ages = []
             for idx in idxs:
-                img_path = os.path.join(self.root, self.file_names[idx])
-                img = self.totensor(transform.resize(io.imread(img_path), (224, 224))).float()
+                img = self.getimage(idx)
                 age = self.ages[idx]
                 images.append(img)
                 ages.append(age)
             return torch.stack(images), torch.Tensor(ages).view(-1, 1)
         else:
-            img_path = os.path.join(self.root, self.file_names[idx])
-            img = self.totensor(transform.resize(io.imread(img_path), (224, 224)))
+            img = self.getimage(idx)
             age = self.ages[idx]
             return img, age
+
+    def getimage(self, idx):
+        filename = self.file_names[idx]
+        img_path = os.path.join(self.root, filename)
+        source = io.Bytes(self.bucket.blob(filename).download_as_string()) if self.gcs \
+            else os.path.join(self.root, filename)
+        return self.totensor(
+            skimage.transform.resize(
+                skimage.io.imread(
+                    source
+                ), (224, 224)
+            )
+        ).float()
 
 
 class Loss(torch.nn.Module):
