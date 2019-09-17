@@ -1,5 +1,5 @@
 {
-    "master_url": "http://localhost:5000",
+    "master_url": "http://34.70.182.52:5000",
     "batch_size": 16,
     "mode": "async",
     "port": 5000,
