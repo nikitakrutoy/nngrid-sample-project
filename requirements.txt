@@ -1,4 +1,6 @@
-torch==0.4.1
+torch
+torchvision 
+torchvision
 scikit-image
 torchvision
 numpy
