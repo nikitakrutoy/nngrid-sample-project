@@ -64,7 +64,7 @@ class CACDDataset(Dataset):
     def getimage(self, idx):
         filename = self.file_names[idx]
         img_path = os.path.join(self.root, filename)
-        source = io.Bytes(self.bucket.blob(filename).download_as_string()) if self.gcs \
+        source = io.BytesIO(self.bucket.blob(filename).download_as_string()) if self.gcs \
             else os.path.join(self.root, filename)
         return self.totensor(
             skimage.transform.resize(
