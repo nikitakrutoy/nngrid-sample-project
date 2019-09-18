@@ -7,6 +7,7 @@ import pickle
 import os
 import torch
 import skimage
+import io
 
 class Model(torch.nn.Module):
     def __init__(self, pretrained=False):
