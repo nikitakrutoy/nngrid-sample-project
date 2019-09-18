@@ -1,6 +1,4 @@
 torch
-torchvision 
-torchvision
 scikit-image
 torchvision
 numpy

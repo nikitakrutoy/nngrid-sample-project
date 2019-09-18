@@ -24,7 +24,7 @@ class Model(torch.nn.Module):
 
 class CACDDataset(Dataset):
     def __init__(self, root_path, gcs=True):
-        file_names_path = os.path.join(root_path, "data/CACD_file_names.pickle")
+        file_names_path = os.path.join(root_path, "data/CACD_filenames.pickle")
         ages_path = os.path.join(root_path, "data/CACD_ages.pickle")
         self.client = storage.Client()
         self.bucket = self.client.bucket("cacd2000")
