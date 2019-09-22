@@ -32,5 +32,18 @@ def time_hist(vis, state):
     if len(state["compute_time"]) > 1:
         vis.histogram(state["compute_time"], win="time_hist")
 
+def download_time(vis, time):
+    if len(state["download_time"]) > 1:
+        vis.histogram(state["download_time"], win="download_time_hist")
 
-metrics = [loss_time, loss_step, time_step, time_hist]
+    vis.line(state["download_time"][-1:], [sum(state["compute_time"])], win="downloadtime_step", 
+        name=f"worker_{state['id']}", update="append",
+        opts=dict(
+                showlegend=True,
+                xlabel="Time",
+                ylabel="Download time"
+            ),
+    )
+
+
+metrics = [loss_time, loss_step, time_step, time_hist, download_time]
