@@ -3,3 +3,4 @@ scikit-image
 torchvision
 numpy
 google-cloud-storage
+plotly

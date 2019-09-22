@@ -1,3 +1,5 @@
+import plotly.graph_objs as go
+
 def loss_time(vis, state):
     vis.line(state["loss"][-1:], [sum(state["compute_time"])], win="loss_time", 
         name=f"worker_{state['id']}", update="append",
@@ -30,11 +32,24 @@ def time_step(vis, state):
 
 def time_hist(vis, state):
     if len(state["compute_time"]) > 1:
-        vis.histogram(state["compute_time"], win="time_hist", name=f"worker_{state['id']}")
+        vis.histogram(
+            state["compute_time"], 
+            win=state['id'],
+            opts=dict(
+                title=f"step_time"
+            )
+        )
 
 def download_time(vis, state):
     if len(state["download_time"]) > 1:
-        vis.histogram(state["download_time"], win="download_time_hist", name=f"worker_{state['id']}")
+        vis.histogram(
+            state["download_time"], 
+            win=state['id'],
+            opts=dict(
+                title=f"download_time"
+            )
+
+        )
 
     vis.line(state["download_time"][-1:], [sum(state["compute_time"])], win="downloadtime_step", 
         name=f"worker_{state['id']}", update="append",
