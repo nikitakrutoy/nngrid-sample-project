@@ -30,11 +30,11 @@ def time_step(vis, state):
 
 def time_hist(vis, state):
     if len(state["compute_time"]) > 1:
-        vis.histogram(state["compute_time"], win="time_hist")
+        vis.histogram(state["compute_time"], win="time_hist", name=f"worker_{state['id']}")
 
-def download_time(vis, time):
+def download_time(vis, state):
     if len(state["download_time"]) > 1:
-        vis.histogram(state["download_time"], win="download_time_hist")
+        vis.histogram(state["download_time"], win="download_time_hist", name=f"worker_{state['id']}")
 
     vis.line(state["download_time"][-1:], [sum(state["compute_time"])], win="downloadtime_step", 
         name=f"worker_{state['id']}", update="append",
