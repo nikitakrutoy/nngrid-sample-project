@@ -34,7 +34,8 @@ def time_hist(vis, state):
     if len(state["compute_time"]) > 1:
         vis.histogram(
             state["compute_time"], 
-            win=state['id'],
+            env=state['id'],
+            win="step_time",
             opts=dict(
                 title=f"step_time"
             )
@@ -44,7 +45,8 @@ def download_time(vis, state):
     if len(state["download_time"]) > 1:
         vis.histogram(
             state["download_time"], 
-            win=state['id'],
+            env=state['id'],
+            win="download_time",
             opts=dict(
                 title=f"download_time"
             )
