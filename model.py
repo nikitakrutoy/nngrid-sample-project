@@ -65,7 +65,7 @@ class CACDDataset(Dataset):
         filename = self.file_names[idx]
         img_path = os.path.join(self.root, filename)
         source = io.BytesIO(self.bucket.blob(filename).download_as_string()) if self.gcs \
-            else os.path.join(self.root, filename)
+            else img_path
         return self.totensor(
             skimage.transform.resize(
                 skimage.io.imread(
