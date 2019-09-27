@@ -1,5 +1,5 @@
 {
-    "master_url": "35.192.146.104",
+    "master_url": "104.154.179.81",
     "batch_size": 16,
     "mode": "async",
     "port": 5000,
