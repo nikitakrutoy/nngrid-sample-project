@@ -82,7 +82,7 @@ class Loss(torch.nn.Module):
 
     def forward(self, X, y):
         y_pred = self.model(X.float()).view(-1)
-        return torch.nn.MSELoss()(y_pred, y.view(-1).float())
+        return torch.nn.SmoothL1Loss()(y_pred, y.view(-1).float())
 
 
 Opt = torch.optim.Adam
