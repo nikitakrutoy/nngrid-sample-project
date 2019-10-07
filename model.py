@@ -1,4 +1,4 @@
-from torchvision.models import resnet18
+from torchvision.models import resnet34
 from torchvision import transforms
 from torch.utils.data import Dataset, DataLoader
 from google.cloud import storage
@@ -12,7 +12,7 @@ import io
 class Model(torch.nn.Module):
     def __init__(self, pretrained=False):
         super().__init__()
-        self.resnet = resnet18(pretrained=pretrained)
+        self.resnet = resnet34(pretrained=pretrained)
         self.regressor = torch.nn.Sequential(
             torch.nn.LeakyReLU(),
             torch.nn.BatchNorm1d(num_features=1000),
@@ -82,7 +82,7 @@ class Loss(torch.nn.Module):
 
     def forward(self, X, y):
         y_pred = self.model(X.float()).view(-1)
-        return torch.nn.SmoothL1Loss()(y_pred, y.view(-1).float())
+        return torch.nn.MSELoss()(y_pred, y.view(-1).float())
 
 
 Opt = torch.optim.Adam
